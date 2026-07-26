@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Phantasmaa · Login</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0e0e10 0%, #14141a 100%);
+  color: #f5f5f7;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.shell { width: 100%; max-width: 380px; }
+.brand {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.brand-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #ffd54f;
+  letter-spacing: -0.5px;
+}
+.brand-sub {
+  font-size: 13px;
+  color: #888;
+  margin-top: 4px;
+}
+.card {
+  background: rgba(20, 20, 26, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 28px 22px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+.card-title {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+.card-sub {
+  font-size: 13px;
+  color: #999;
+  margin: 0 0 22px;
+}
+.field { margin-bottom: 14px; }
+.field label {
+  display: block;
+  font-size: 12px;
+  color: #aaa;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.field input {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: #f5f5f7;
+  font-size: 16px;
+  font-family: inherit;
+}
+.field input:focus {
+  outline: none;
+  border-color: #ffd54f;
+  background: rgba(0, 0, 0, 0.6);
+}
+.submit {
+  width: 100%;
+  padding: 13px;
+  background: #ffd54f;
+  color: #14141a;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 6px;
+}
+.submit:active { transform: translateY(1px); }
+.error {
+  background: rgba(244, 67, 54, 0.15);
+  border: 1px solid rgba(244, 67, 54, 0.4);
+  color: #ff8a80;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+.apps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 18px;
+  font-size: 11px;
+  color: #555;
+}
+.apps span {
+  padding: 3px 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="brand">
+    <div class="brand-title">Phantasmaa</div>
+    <div class="brand-sub">Una cuenta para todas las apps</div>
+  </div>
+
+  <form class="card" method="POST">
+    <div class="card-title">Iniciá sesión</div>
+    <div class="card-sub">Misma cuenta que Mis Finanzas</div>
+
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <input type="hidden" name="next" value="{{ next or '/' }}">
+
+    <div class="field">
+      <label>Usuario</label>
+      <input type="text" name="username" autocomplete="username" autofocus required>
+    </div>
+
+    <div class="field">
+      <label>Contraseña</label>
+      <input type="password" name="password" autocomplete="current-password" required>
+    </div>
+
+    <button type="submit" class="submit">Entrar</button>
+
+    <div class="apps">
+      <span>🎸 Chordbook</span>
+      <span>💰 Finanzas</span>
+      <span>📄 PDF Tools</span>
+      <span>🖼️ Image</span>
+    </div>
+  </form>
+</div>
+</body>
+</html>
