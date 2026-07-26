@@ -2,8 +2,36 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Phantasmaa — Inicio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#8b5cf6">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Panoplia · centro de acceso a la suite Phantasmaa: MeTube, PDF Tools, Chordbook, finanzas y más.">
+
+<!-- PWA manifest + icons -->
+<link rel="manifest" href="/static/manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16.png">
+<link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
+
+<!-- iOS PWA: full-screen with custom status bar -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Panoplia">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="Panoplia">
+
+<!-- Microsoft Windows tile -->
+<meta name="msapplication-TileColor" content="#8b5cf6">
+<meta name="msapplication-tile-image" content="/static/icons/icon-192.png">
+
+<!-- Open Graph preview -->
+<meta property="og:title" content="Panoplia · Phantasmaa Suite">
+<meta property="og:description" content="Centro de acceso a MeTube, PDF Tools, Chordbook, finanzas y más.">
+<meta property="og:image" content="/static/icons/icon-512.png">
+<meta property="og:type" content="website">
+
+<title>Panoplia — Inicio</title>
 <style>
     :root {
         --bg: #0f0f12;
@@ -135,7 +163,7 @@
 <body>
 <div class="wrap">
     <header>
-        <div class="logo">Phantasmaa</div>
+        <div class="logo">Panoplia</div>
         <div class="tag">Suite de herramientas — una sola cuenta</div>
         <div class="status">
             <span class="dot"></span>
@@ -201,5 +229,20 @@
     </div>
     {% endif %}
 </div>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/static/sw.js')
+        .then((reg) => console.log('[panoplia] sw registered:', reg.scope))
+        .catch((err) => console.warn('[panoplia] sw registration failed:', err));
+    });
+  }
+  let deferredInstallPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    document.dispatchEvent(new CustomEvent('panoplia-installable'));
+  });
+</script>
 </body>
 </html>

@@ -1,0 +1,72 @@
+{
+  "name": "Panoplia · Phantasmaa Suite",
+  "short_name": "Panoplia",
+  "description": "Centro de acceso a toda la suite Phantasmaa: MeTube, PDF Tools, Chordbook, finanzas y más.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f0f12",
+  "theme_color": "#8b5cf6",
+  "lang": "es",
+  "dir": "ltr",
+  "categories": ["productivity", "utilities", "entertainment"],
+  "icons": [
+    {
+      "src": "/static/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "MeTube",
+      "short_name": "MeTube",
+      "description": "Descargar videos de YouTube y 1800+ sitios",
+      "url": "/redirect/metube",
+      "icons": [
+        {
+          "src": "/static/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "PDF Tools",
+      "short_name": "PDF",
+      "description": "Unir, dividir, comprimir PDFs",
+      "url": "/redirect/pdf-tools",
+      "icons": [
+        {
+          "src": "/static/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Chordbook",
+      "short_name": "Chordbook",
+      "description": "Canciones con acordes",
+      "url": "/redirect/chordbook",
+      "icons": [
+        {
+          "src": "/static/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

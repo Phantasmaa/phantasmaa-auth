@@ -253,6 +253,28 @@ def whoami():
     )
 
 
+# Shortcut redirect endpoints used by the PWA manifest. They translate
+# a friendly name into the full URL of the upstream app.
+_APP_URLS = {
+    "metube":         "http://173.249.3.113:8102/",
+    "pdf-tools":      "http://173.249.3.113:8101/",
+    "chordbook":      "http://173.249.3.113:8104/",
+    "finanzas":       "http://173.249.3.113:8085/",
+    "image-crop":     "http://173.249.3.113:8096/",
+    "image-enhancer": "http://173.249.3.113:8098/",
+    "pdf-chat":       "http://173.249.3.113:8095/",
+}
+
+
+@app.route("/redirect/<app_name>")
+def redirect_to_app(app_name):
+    """PWA shortcut target. 302 to the canonical app URL."""
+    target = _APP_URLS.get(app_name)
+    if not target:
+        return jsonify(error="unknown_app", known=list(_APP_URLS)), 404
+    return redirect(target)
+
+
 # ─── nginx auth_request endpoint ──────────────────────────────────────────
 
 @app.route("/auth/verify")
