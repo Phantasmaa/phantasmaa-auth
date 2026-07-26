@@ -75,6 +75,7 @@ class User(UserMixin, Base):
     email         = Column(String(120))
     is_admin      = Column(Boolean, nullable=False, default=False)
     created_at    = Column(DateTime)
+    last_login_at = Column(DateTime)  # written by /login on success
 
 
 _engine = create_engine(
@@ -141,6 +142,18 @@ def _verify(token: str):
 
 # ─── Routes ───────────────────────────────────────────────────────────────
 
+@app.route("/")
+def index():
+    """Landing page — links to all apps, shows login state if any."""
+    user = None
+    token = request.cookies.get(COOKIE_NAME)
+    if token:
+        verified = _verify(token)
+        if verified:
+            user = _UsersSession().get(User, verified[0])
+    return render_template("index.html", user=user)
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     # `next` is the URL the user wanted to reach before being redirected
@@ -164,6 +177,10 @@ def login():
 
         user = _UsersSession().query(User).filter_by(username=username).first()
         if user and check_password_hash(user.password_hash, password):
+            # Stamp last_login_at — shown in the admin table so you can
+            # see who's been around and spot abandoned accounts.
+            user.last_login_at = datetime.utcnow()
+            _UsersSession().commit()
             login_user(user, remember=True, duration=timedelta(days=90))
             # Set the auth_token cookie that nginx will validate
             token = _sign(user.id)
@@ -261,6 +278,202 @@ def auth_verify():
     resp.headers["X-Username"] = user.username
     resp.headers["X-Is-Admin"] = "1" if user.is_admin else "0"
     return resp
+
+
+# ─── Admin endpoints ──────────────────────────────────────────────────────
+# These are server-rendered (admin panel) or JSON (admin actions). All
+# gated by a helper that checks the auth_token cookie and the is_admin
+# flag. We don't use flask_login here because the routes are accessed
+# directly via Flask, not gated by nginx.
+
+def _require_admin():
+    """Resolve the current user from cookie or abort 401/403. Returns
+    (user, None) on success, (None, (response, status)) on failure."""
+    token = request.cookies.get(COOKIE_NAME)
+    if not token:
+        return None, (jsonify(error="unauthorized"), 401)
+    verified = _verify(token)
+    if not verified:
+        return None, (jsonify(error="unauthorized"), 401)
+    user = _UsersSession().get(User, verified[0])
+    if not user:
+        return None, (jsonify(error="unauthorized"), 401)
+    if not user.is_admin:
+        return None, (jsonify(error="forbidden"), 403)
+    return user, None
+
+
+@app.route("/admin/users", methods=["GET"])
+def admin_users_page():
+    """Server-rendered admin panel. Lists every user with their
+    last_login_at, created_at, and admin flag. Form actions POST back
+    to the JSON endpoints below."""
+    user, err = _require_admin()
+    if err:
+        return err
+    users = _UsersSession().query(User).order_by(User.username).all()
+    return render_template("admin/users.html", user=user, users=users)
+
+
+@app.route("/api/admin/users", methods=["GET"])
+def api_admin_users_list():
+    """JSON list of users — used by the admin panel JS for live updates."""
+    user, err = _require_admin()
+    if err:
+        return err
+    users = _UsersSession().query(User).order_by(User.username).all()
+    return jsonify(users=[{
+        "id": u.id,
+        "username": u.username,
+        "nombre": u.nombre,
+        "email": u.email,
+        "is_admin": bool(u.is_admin),
+        "created_at": u.created_at.isoformat() if u.created_at else None,
+        "last_login_at": u.last_login_at.isoformat() if u.last_login_at else None,
+    } for u in users])
+
+
+@app.route("/api/admin/users", methods=["POST"])
+def api_admin_users_create():
+    """Create a new user. Body: {username, password, nombre?, email?,
+    is_admin?}. Pennypath owns the table but INSERTs are fine — both
+    services write to /root/finanzas/finanzas.db."""
+    user, err = _require_admin()
+    if err:
+        return err
+    data = request.get_json() or {}
+    username = (data.get("username") or "").strip().lower()
+    password = data.get("password") or ""
+    if not username or not password:
+        return jsonify(error="missing_fields"), 400
+    if len(password) < 8:
+        return jsonify(error="password_too_short",
+                       msg="La contraseña debe tener al menos 8 caracteres"), 400
+    if _UsersSession().query(User).filter_by(username=username).first():
+        return jsonify(error="username_taken"), 409
+    new_user = User(
+        username=username,
+        password_hash=generate_password_hash(password),
+        nombre=(data.get("nombre") or "").strip() or None,
+        email=(data.get("email") or "").strip() or None,
+        is_admin=bool(data.get("is_admin", False)),
+        created_at=datetime.utcnow(),
+    )
+    _UsersSession().add(new_user)
+    _UsersSession().commit()
+    return jsonify(ok=True, id=new_user.id, username=new_user.username)
+
+
+@app.route("/api/admin/users/<int:user_id>", methods=["PATCH"])
+def api_admin_users_update(user_id):
+    """Update a user. Body can include: nombre, email, is_admin.
+    Password changes are handled by a separate endpoint so we never
+    accidentally blank a hash."""
+    user, err = _require_admin()
+    if err:
+        return err
+    target = _UsersSession().get(User, user_id)
+    if not target:
+        return jsonify(error="not_found"), 404
+    data = request.get_json() or {}
+    if "is_admin" in data:
+        new_admin = bool(data["is_admin"])
+        if not new_admin and target.is_admin:
+            admins = _UsersSession().query(User).filter_by(is_admin=True).count()
+            if admins <= 1 and target.id == user.id:
+                return jsonify(error="last_admin",
+                               msg="No puedes quitarte admin a ti mismo siendo el único admin"), 400
+        target.is_admin = new_admin
+    for k in ("nombre", "email"):
+        if k in data:
+            setattr(target, k, (data[k] or "").strip() or None)
+    _UsersSession().commit()
+    return jsonify(ok=True)
+
+
+@app.route("/api/admin/users/<int:user_id>/reset-password", methods=["POST"])
+def api_admin_users_reset_password(user_id):
+    """Admin resets another user's password. Body: {new_password}."""
+    user, err = _require_admin()
+    if err:
+        return err
+    target = _UsersSession().get(User, user_id)
+    if not target:
+        return jsonify(error="not_found"), 404
+    data = request.get_json() or {}
+    new_pw = data.get("new_password") or ""
+    if len(new_pw) < 8:
+        return jsonify(error="password_too_short"), 400
+    target.password_hash = generate_password_hash(new_pw)
+    _UsersSession().commit()
+    return jsonify(ok=True)
+
+
+@app.route("/api/admin/users/<int:user_id>", methods=["DELETE"])
+def api_admin_users_delete(user_id):
+    """Delete a user. Refuses to delete the last remaining admin or
+    yourself (to prevent accidental lockout)."""
+    user, err = _require_admin()
+    if err:
+        return err
+    target = _UsersSession().get(User, user_id)
+    if not target:
+        return jsonify(error="not_found"), 404
+    if target.id == user.id:
+        return jsonify(error="self_delete",
+                       msg="No puedes borrarte a ti mismo"), 400
+    if target.is_admin:
+        admins = _UsersSession().query(User).filter_by(is_admin=True).count()
+        if admins <= 1:
+            return jsonify(error="last_admin",
+                           msg="No se puede borrar al último admin"), 400
+    _UsersSession().delete(target)
+    _UsersSession().commit()
+    return jsonify(ok=True)
+
+
+# ─── Self-service account ─────────────────────────────────────────────────
+
+@app.route("/account", methods=["GET"])
+def account_page():
+    """Logged-in user's own profile page. Lets them change their own
+    password and see when they last logged in."""
+    token = request.cookies.get(COOKIE_NAME)
+    if not token:
+        return redirect("/login?next=/account")
+    verified = _verify(token)
+    if not verified:
+        return redirect("/login?next=/account")
+    user = _UsersSession().get(User, verified[0])
+    if not user:
+        return redirect("/login?next=/account")
+    return render_template("account.html", user=user)
+
+
+@app.route("/api/account/change-password", methods=["POST"])
+def api_account_change_password():
+    """Change my own password. Body: {current_password, new_password}.
+    Requires the current password to prevent session hijacking from
+    a stolen cookie from doing damage."""
+    token = request.cookies.get(COOKIE_NAME)
+    if not token:
+        return jsonify(error="unauthorized"), 401
+    verified = _verify(token)
+    if not verified:
+        return jsonify(error="unauthorized"), 401
+    user = _UsersSession().get(User, verified[0])
+    if not user:
+        return jsonify(error="unauthorized"), 401
+    data = request.get_json() or {}
+    current_pw = data.get("current_password") or ""
+    new_pw = data.get("new_password") or ""
+    if not check_password_hash(user.password_hash, current_pw):
+        return jsonify(error="wrong_current"), 403
+    if len(new_pw) < 8:
+        return jsonify(error="password_too_short"), 400
+    user.password_hash = generate_password_hash(new_pw)
+    _UsersSession().commit()
+    return jsonify(ok=True)
 
 
 def _unauth():

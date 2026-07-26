@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phantasmaa — Inicio</title>
+<style>
+    :root {
+        --bg: #0f0f12;
+        --surface: #1a1a1f;
+        --surface-2: #24242b;
+        --border: #2e2e36;
+        --text: #ececf1;
+        --muted: #9a9aa6;
+        --accent: #8b5cf6;
+        --accent-glow: rgba(139, 92, 246, 0.35);
+        --green: #22c55e;
+        --yellow: #eab308;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        background: radial-gradient(ellipse at top, #1a1326 0%, var(--bg) 60%);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        min-height: 100vh;
+        padding: 48px 20px;
+        line-height: 1.5;
+    }
+    .wrap { max-width: 720px; margin: 0 auto; }
+    header { text-align: center; margin-bottom: 40px; }
+    .logo {
+        font-size: 36px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 50%, #6d28d9 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.5px;
+    }
+    .tag { color: var(--muted); margin-top: 8px; font-size: 15px; }
+    .status {
+        margin: 24px auto 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 6px 14px;
+        font-size: 13px;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+        margin-bottom: 32px;
+    }
+    .app {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 18px;
+        text-decoration: none;
+        color: var(--text);
+        transition: all 0.18s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .app:hover {
+        border-color: var(--accent);
+        background: var(--surface-2);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px var(--accent-glow);
+    }
+    .app-icon { font-size: 24px; }
+    .app-name { font-weight: 600; font-size: 16px; }
+    .app-desc { color: var(--muted); font-size: 13px; }
+    .app-meta {
+        color: var(--muted);
+        font-size: 11px;
+        font-family: ui-monospace, "SF Mono", Menlo, monospace;
+        margin-top: 4px;
+    }
+    .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 22px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.15s;
+    }
+    .btn-primary {
+        background: var(--accent);
+        color: white;
+        box-shadow: 0 4px 16px var(--accent-glow);
+    }
+    .btn-primary:hover { background: #7c3aed; transform: translateY(-1px); }
+    .btn-secondary {
+        background: var(--surface);
+        color: var(--text);
+        border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: var(--surface-2); border-color: var(--muted); }
+    .user {
+        margin-top: 32px;
+        padding: 16px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        text-align: center;
+        font-size: 14px;
+        color: var(--muted);
+    }
+    .user strong { color: var(--text); }
+    .badge {
+        display: inline-block;
+        padding: 2px 8px;
+        background: rgba(139, 92, 246, 0.15);
+        color: var(--accent);
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        margin-left: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+</style>
+</head>
+<body>
+<div class="wrap">
+    <header>
+        <div class="logo">Phantasmaa</div>
+        <div class="tag">Suite de herramientas — una sola cuenta</div>
+        <div class="status">
+            <span class="dot"></span>
+            <span>SSO activo · cook</span>
+        </div>
+    </header>
+
+    <div class="grid">
+        <a class="app" href="http://173.249.3.113:8104/">
+            <div class="app-icon">🎸</div>
+            <div class="app-name">Chordbook</div>
+            <div class="app-desc">Canciones con acordes, autoguardado, PDFs</div>
+            <div class="app-meta">:8104</div>
+        </a>
+        <a class="app" href="http://173.249.3.113:8101/">
+            <div class="app-icon">📄</div>
+            <div class="app-name">PDF Tools</div>
+            <div class="app-desc">Unir, dividir, comprimir, convertir PDFs</div>
+            <div class="app-meta">:8101</div>
+        </a>
+        <a class="app" href="http://173.249.3.113:8085/">
+            <div class="app-icon">💰</div>
+            <div class="app-name">Mis Finanzas</div>
+            <div class="app-desc">Control de gastos, presupuestos, TC</div>
+            <div class="app-meta">:8085</div>
+        </a>
+        <a class="app" href="http://173.249.3.113:8096/">
+            <div class="app-icon">✂️</div>
+            <div class="app-name">Image Crop</div>
+            <div class="app-desc">Recortar y redimensionar imágenes</div>
+            <div class="app-meta">:8096</div>
+        </a>
+        <a class="app" href="http://173.249.3.113:8098/">
+            <div class="app-icon">🖼️</div>
+            <div class="app-name">Image Enhancer</div>
+            <div class="app-desc">Mejorar calidad de fotos automáticamente</div>
+            <div class="app-meta">:8098</div>
+        </a>
+        <a class="app" href="http://173.249.3.113:8095/">
+            <div class="app-icon">💬</div>
+            <div class="app-name">PDF Chat</div>
+            <div class="app-desc">Chatear con documentos PDF</div>
+            <div class="app-meta">:8095</div>
+        </a>
+        <a class="app" href="http://173.249.3.113:8102/">
+            <div class="app-icon">🎬</div>
+            <div class="app-name">MeTube</div>
+            <div class="app-desc">Descargar videos de YouTube y 1800+ sitios</div>
+            <div class="app-meta">:8102</div>
+        </a>
+    </div>
+
+    {% if user %}
+    <div class="user">
+        Sesión iniciada como <strong>{{ user.username }}</strong>{{ ' <span class="badge">admin</span>'|safe if user.is_admin }}
+        · <a href="/account" style="color: var(--text); text-decoration: none;">Mi cuenta</a>
+        {% if user.is_admin %} · <a href="/admin/users" style="color: var(--accent); text-decoration: none;">Admin</a>{% endif %}
+        · <a href="/logout" style="color: var(--accent); text-decoration: none;">Cerrar sesión</a>
+    </div>
+    {% else %}
+    <div class="actions">
+        <a class="btn btn-primary" href="/login">Iniciar sesión</a>
+    </div>
+    {% endif %}
+</div>
+</body>
+</html>
