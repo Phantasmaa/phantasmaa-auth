@@ -31,7 +31,7 @@ from flask import (
 )
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user
 from sqlalchemy import (
-    create_engine, Column, Integer, String, Boolean, DateTime,
+    create_engine, Column, Integer, String, Boolean, DateTime, func,
 )
 from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -273,6 +273,66 @@ def redirect_to_app(app_name):
     if not target:
         return jsonify(error="unknown_app", known=list(_APP_URLS)), 404
     return redirect(target)
+
+
+# ─── JSON API endpoint for native mobile clients ──────────────────────────
+# Returns the {ok, user:{id, username, is_admin}} shape that Panoplia
+# Android (and any other native client) expects. The auth_token cookie is
+# set so subsequent requests through nginx auth_request work automatically.
+# See phantasmaa-auth README "JSON API" section.
+
+@app.route("/api/auth/login", methods=["POST"])
+def api_auth_login():
+    if not request.is_json:
+        return jsonify(ok=False, error="expected_json"), 400
+    data = request.get_json() or {}
+    username = (data.get("username") or "").strip()
+    password = data.get("password") or ""
+    if not username or not password:
+        return jsonify(ok=False, error="missing_credentials"), 400
+
+    # Username lookup is case-insensitive — users type "Manuel" / "manuel" /
+    # "MANUEL" and we match whatever is stored. Email-style logins are the
+    # obvious next step; for now we just lowercase both sides.
+    user = (
+        _UsersSession()
+        .query(User)
+        .filter(func.lower(User.username) == username.lower())
+        .first()
+    )
+    if user and check_password_hash(user.password_hash, password):
+        user.last_login_at = datetime.utcnow()
+        _UsersSession().commit()
+        login_user(user, remember=True, duration=timedelta(days=90))
+        token = _sign(user.id)
+        resp = jsonify(
+            ok=True,
+            user={
+                "id": user.id,
+                "username": user.username,
+                "is_admin": bool(user.is_admin),
+            },
+            auth_token=token,
+        )
+        resp.set_cookie(
+            COOKIE_NAME, token,
+            max_age=COOKIE_MAX_AGE,
+            httponly=True,
+            samesite="Lax",
+            path="/",
+        )
+        return resp, 200
+
+    # Distinguish "no such user" vs "wrong password" so the app can show a
+    # more specific message; both are 401 from the caller's point of view.
+    return (
+        jsonify(
+            ok=False,
+            error="bad_credentials",
+            message="Usuario o contraseña incorrectos",
+        ),
+        401,
+    )
 
 
 # ─── nginx auth_request endpoint ──────────────────────────────────────────
