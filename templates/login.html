@@ -3,153 +3,502 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Phantasmaa · Login</title>
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0e1a">
+<title>Phantasma hub · Login</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzIyZDNlZSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNhODU1ZjciLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgcng9IjciIGZpbGw9InVybCgjZykiLz4KICA8cGF0aCBkPSJNOCAxNGMwLTQgMy04IDgtOHM4IDQgOCA4djRjMCAyLTEgNC0yIDUtMSAxLTIgMi0yIDN2MmMwIDEtMSAyLTIgMnMtMi0xLTItMnYtMmMwLTEtMS0yLTItMy0xLTEtMi0zLTItNXYtNHoiIGZpbGw9IndoaXRlIiBvcGFjaXR5PSIwLjk1Ii8+CiAgPGNpcmNsZSBjeD0iMTIiIGN5PSIxMyIgcj0iMS41IiBmaWxsPSIjMGEwZTFhIi8+CiAgPGNpcmNsZSBjeD0iMjAiIGN5PSIxMyIgcj0iMS41IiBmaWxsPSIjMGEwZTFhIi8+Cjwvc3ZnPgo=">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: linear-gradient(180deg, #0e0e10 0%, #14141a 100%);
-  color: #f5f5f7;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-.shell { width: 100%; max-width: 380px; }
-.brand {
-  text-align: center;
-  margin-bottom: 28px;
-}
-.brand-title {
-  font-size: 28px;
-  font-weight: 800;
-  color: #ffd54f;
-  letter-spacing: -0.5px;
-}
-.brand-sub {
-  font-size: 13px;
-  color: #888;
-  margin-top: 4px;
-}
-.card {
-  background: rgba(20, 20, 26, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  padding: 28px 22px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-}
-.card-title {
-  font-size: 17px;
-  font-weight: 600;
-  margin: 0 0 6px;
-}
-.card-sub {
-  font-size: 13px;
-  color: #999;
-  margin: 0 0 22px;
-}
-.field { margin-bottom: 14px; }
-.field label {
-  display: block;
-  font-size: 12px;
-  color: #aaa;
-  margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.field input {
-  width: 100%;
-  padding: 12px 14px;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
-  color: #f5f5f7;
-  font-size: 16px;
-  font-family: inherit;
-}
-.field input:focus {
-  outline: none;
-  border-color: #ffd54f;
-  background: rgba(0, 0, 0, 0.6);
-}
-.submit {
-  width: 100%;
-  padding: 13px;
-  background: #ffd54f;
-  color: #14141a;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 6px;
-}
-.submit:active { transform: translateY(1px); }
-.error {
-  background: rgba(244, 67, 54, 0.15);
-  border: 1px solid rgba(244, 67, 54, 0.4);
-  color: #ff8a80;
-  padding: 10px 12px;
-  border-radius: 6px;
-  font-size: 13px;
-  margin-bottom: 16px;
-  text-align: center;
-}
-.apps {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
-  margin-top: 18px;
-  font-size: 11px;
-  color: #555;
-}
-.apps span {
-  padding: 3px 8px;
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
+  :root {
+    --bg: #0a0e1a;
+    --bg-card: rgba(22, 27, 46, 0.6);
+    --fg: #f1f5f9;
+    --fg-muted: #94a3b8;
+    --border: rgba(255,255,255,0.08);
+    --radius: 16px;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-heading: 'Space Grotesk', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; overflow: hidden; }
+  body {
+    color: var(--fg);
+    font-family: var(--font-body);
+    background:
+      radial-gradient(ellipse at top left, rgba(34, 211, 238, 0.18), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(168, 85, 247, 0.18), transparent 50%),
+      radial-gradient(circle at 50% 100%, rgba(99, 102, 241, 0.08), transparent 60%),
+      var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+  }
+
+  /* Particles canvas */
+  #particles {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Shell */
+  .shell {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+  }
+
+  /* Brand */
+  .brand { text-align: center; margin-bottom: 28px; }
+  .brand-glyph {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 16px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #22d3ee 0%, #a855f7 100%);
+    display: grid;
+    place-items: center;
+    box-shadow:
+      0 12px 32px rgba(34, 211, 238, 0.35),
+      0 4px 16px rgba(168, 85, 247, 0.25);
+    animation: glyphPulse 4s ease-in-out infinite;
+  }
+  @keyframes glyphPulse {
+    0%, 100% { transform: rotate(-4deg) scale(1); }
+    50%      { transform: rotate(4deg)  scale(1.05); }
+  }
+  .brand-glyph svg { color: white; }
+  .brand-title {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 6px;
+    background: linear-gradient(135deg, #22d3ee 0%, #a855f7 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .brand-sub {
+    font-size: 0.875rem;
+    color: var(--fg-muted);
+    margin: 0;
+    font-weight: 400;
+  }
+
+  /* Card — glassmorphism */
+  .card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 32px 28px;
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    box-shadow:
+      0 24px 64px rgba(0,0,0,0.45),
+      inset 0 1px 0 rgba(255,255,255,0.06);
+    animation: cardRise 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  @keyframes cardRise {
+    from { opacity: 0; transform: translateY(16px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0)    scale(1); }
+  }
+
+  .card-title {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+  }
+  .card-sub {
+    font-size: 0.875rem;
+    color: var(--fg-muted);
+    margin: 0 0 24px;
+  }
+
+  /* Error */
+  .error {
+    background: rgba(244, 67, 54, 0.12);
+    border: 1px solid rgba(244, 67, 54, 0.4);
+    color: #ff8a80;
+    font-size: 0.8125rem;
+    margin-bottom: 18px;
+    text-align: center;
+    padding: 10px 14px;
+    border-radius: 10px;
+  }
+
+  /* Resend */
+  .resend-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(34, 211, 238, 0.4);
+    color: #22d3ee;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    font-family: inherit;
+    margin-bottom: 16px;
+    transition: all 0.2s;
+  }
+  .resend-btn:hover {
+    background: rgba(34, 211, 238, 0.08);
+    border-color: rgba(34, 211, 238, 0.6);
+  }
+
+  /* Fields */
+  .field { margin-bottom: 14px; }
+  .field label {
+    display: block;
+    font-size: 0.6875rem;
+    color: var(--fg-muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+  .field-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .field-input-wrap svg.lead {
+    position: absolute;
+    left: 14px;
+    color: var(--fg-muted);
+    pointer-events: none;
+    transition: color 0.2s;
+  }
+  .field input {
+    width: 100%;
+    padding: 13px 14px;
+    padding-right: 44px;
+    padding-left: 42px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    color: var(--fg);
+    font-size: 0.9375rem;
+    font-family: inherit;
+    transition: all 0.2s;
+    outline: none;
+  }
+  .field input::placeholder { color: var(--fg-muted); opacity: 0.6; }
+  .field input:hover { border-color: rgba(255,255,255,0.16); background: rgba(255,255,255,0.05); }
+  .field input:focus {
+    border-color: rgba(34, 211, 238, 0.6);
+    background: rgba(255,255,255,0.06);
+    box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.12);
+  }
+
+  /* Browser autofill forced dark — Chrome/Safari apply light styles
+     to filled inputs by default which makes the form look "broken".
+     Lock the palette so it stays consistent with the rest of the UI. */
+  .field input:-webkit-autofill,
+  .field input:-webkit-autofill:hover,
+  .field input:-webkit-autofill:focus,
+  .field input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #0a0e1a inset !important;
+    -webkit-text-fill-color: var(--fg) !important;
+    caret-color: var(--fg) !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+  .field input:focus + .pw-toggle { color: #22d3ee; }
+  .field-input-wrap:focus-within svg.lead { color: #22d3ee; }
+
+  /* Password toggle */
+  .pw-toggle {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    color: var(--fg-muted);
+    cursor: pointer;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: color 0.2s, background 0.2s;
+  }
+  .pw-toggle:hover { color: #22d3ee; background: rgba(34, 211, 238, 0.08); }
+  .pw-toggle svg { width: 18px; height: 18px; }
+
+  /* Submit */
+  .submit {
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(135deg, #22d3ee 0%, #a855f7 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: var(--font-heading);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px rgba(168, 85, 247, 0.35), 0 4px 12px rgba(34, 211, 238, 0.25);
+  }
+  .submit:active { transform: translateY(0); }
+  .submit::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s;
+  }
+  .submit:hover::after { transform: translateX(100%); }
+
+  /* Apps pills */
+  .apps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 22px;
+    font-size: 0.6875rem;
+    color: var(--fg-muted);
+  }
+  .apps span {
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    font-family: var(--font-mono);
+  }
+
+  /* Footer */
+  .footer-link {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 0.875rem;
+    color: var(--fg-muted);
+  }
+  .footer-link a {
+    color: #22d3ee;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .footer-link a:hover { color: #a855f7; }
+
+  /* Helper line above footer */
+  .helper-row {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 0.8125rem;
+  }
+  .helper-row a {
+    color: var(--fg-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .helper-row a:hover { color: #22d3ee; }
+
+  /* Reduce motion */
+  @media (prefers-reduced-motion: reduce) {
+    .card, .brand-glyph { animation: none; }
+    .submit::after { display: none; }
+  }
 </style>
 </head>
 <body>
+<canvas id="particles" aria-hidden="true"></canvas>
+
 <div class="shell">
   <div class="brand">
-    <div class="brand-title">Phantasmaa</div>
+    <div class="brand-glyph" aria-hidden="true">
+      <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+        <path d="M8 14c0-4 3-8 8-8s8 4 8 8v4c0 2-1 4-2 5-1 1-2 2-2 3v2c0 1-1 2-2 2s-2-1-2-2v-2c0-1-1-2-2-3-1-1-2-3-2-5v-4z" fill="currentColor" opacity="0.95"/>
+        <circle cx="12" cy="13" r="1.5" fill="#0a0e1a"/>
+        <circle cx="20" cy="13" r="1.5" fill="#0a0e1a"/>
+      </svg>
+    </div>
+    <div class="brand-title">Phantasma hub</div>
     <div class="brand-sub">Una cuenta para todas las apps</div>
   </div>
 
   <form class="card" method="POST">
-    <div class="card-title">Iniciá sesión</div>
-    <div class="card-sub">Misma cuenta que Mis Finanzas</div>
+    <div class="card-title">Inicia sesión</div>
+    <div class="card-sub">Misma cuenta para todas tus apps</div>
 
     {% if error %}
       <div class="error">{{ error }}</div>
     {% endif %}
 
+    {% if show_resend_verification and unverified_email %}
+      <form method="POST" action="/api/auth/resend-verification" style="margin-bottom: 14px;">
+        <input type="hidden" name="email" value="{{ unverified_email }}">
+        <button type="submit" class="resend-btn">Reenviar email de verificación</button>
+      </form>
+    {% endif %}
+
     <input type="hidden" name="next" value="{{ next or '/' }}">
 
     <div class="field">
-      <label>Usuario</label>
-      <input type="text" name="username" autocomplete="username" autofocus required>
+      <label>Email</label>
+      <div class="field-input-wrap">
+        <svg class="lead" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <input type="email" name="email" autocomplete="email" autofocus required>
+      </div>
     </div>
 
     <div class="field">
       <label>Contraseña</label>
-      <input type="password" name="password" autocomplete="current-password" required>
+      <div class="field-input-wrap">
+        <svg class="lead" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <input type="password" name="password" id="password" autocomplete="current-password" required>
+        <button type="button" class="pw-toggle" id="pwToggle" aria-label="Mostrar contraseña" title="Mostrar contraseña">
+          <svg id="eyeOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <svg id="eyeOff" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+            <line x1="1" y1="1" x2="23" y2="23"></line>
+          </svg>
+        </button>
+      </div>
     </div>
 
     <button type="submit" class="submit">Entrar</button>
 
     <div class="apps">
-      <span>🎸 Chordbook</span>
-      <span>💰 Finanzas</span>
-      <span>📄 PDF Tools</span>
-      <span>🖼️ Image</span>
+      <span>Chordbook</span>
+      <span>Finanzas</span>
+      <span>PDF Tools</span>
+      <span>Image</span>
     </div>
   </form>
+
+  <div class="helper-row">
+    <a href="/forgot">¿Olvidaste tu contraseña?</a>
+  </div>
+
+  <div class="footer-link">
+    ¿Eres nuevo? <a href="/register">Crear cuenta</a>
+  </div>
 </div>
+
+<script>
+  (function () {
+    // -------- Particles background ----------
+    var canvas = document.getElementById('particles');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function resize() {
+      canvas.width = canvas.offsetWidth * devicePixelRatio;
+      canvas.height = canvas.offsetHeight * devicePixelRatio;
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+    }
+    resize();
+
+    var particles = [];
+    var COUNT = 60;
+    var COLORS = [
+      'rgba(34, 211, 238, 0.7)',
+      'rgba(168, 85, 247, 0.7)',
+      'rgba(255, 255, 255, 0.4)'
+    ];
+
+    function spawn() {
+      particles.length = 0;
+      for (var i = 0; i < COUNT; i++) {
+        particles.push({
+          x: Math.random() * canvas.offsetWidth,
+          y: Math.random() * canvas.offsetHeight,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25,
+          r: Math.random() * 1.8 + 0.4,
+          c: COLORS[Math.floor(Math.random() * COLORS.length)]
+        });
+      }
+    }
+    spawn();
+
+    var last = performance.now();
+    function tick(now) {
+      var dt = Math.min(40, now - last);
+      last = now;
+      ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        if (p.x < 0 || p.x > canvas.offsetWidth) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.offsetHeight) p.vy *= -1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.c;
+        ctx.fill();
+      }
+
+      for (var i = 0; i < particles.length; i++) {
+        for (var j = i + 1; j < particles.length; j++) {
+          var a = particles[i], b = particles[j];
+          var dx = a.x - b.x, dy = a.y - b.y;
+          var d2 = dx * dx + dy * dy;
+          if (d2 < 14000) {
+            var alpha = (1 - d2 / 14000) * 0.18;
+            ctx.strokeStyle = 'rgba(168, 85, 247, ' + alpha + ')';
+            ctx.lineWidth = 0.6;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      if (!prefersReduced) requestAnimationFrame(tick);
+    }
+    if (!prefersReduced) requestAnimationFrame(tick);
+
+    window.addEventListener('resize', function () { resize(); spawn(); });
+
+    // -------- Password toggle ----------
+    var btn = document.getElementById('pwToggle');
+    var input = document.getElementById('password');
+    var open = document.getElementById('eyeOpen');
+    var off = document.getElementById('eyeOff');
+    if (!btn || !input) return;
+    btn.addEventListener('click', function () {
+      var isPwd = input.type === 'password';
+      input.type = isPwd ? 'text' : 'password';
+      open.style.display = isPwd ? 'none' : '';
+      off.style.display = isPwd ? '' : 'none';
+      btn.setAttribute('aria-label', isPwd ? 'Ocultar contraseña' : 'Mostrar contraseña');
+      btn.setAttribute('title', isPwd ? 'Ocultar contraseña' : 'Mostrar contraseña');
+      input.focus();
+      var v = input.value;
+      input.value = '';
+      input.value = v;
+    });
+  })();
+</script>
 </body>
 </html>

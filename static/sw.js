@@ -10,10 +10,14 @@
 // apps, so the work happens in the upstream apps. We don't cache
 // responses from /api/admin/* or /auth/* at all.
 
-const CACHE_VERSION = "v1";
+const CACHE_VERSION = "v4";
 const APP_SHELL = [
   "/",
   "/login",
+  "/static/favicon.svg",
+  "/static/icons/favicon-16.png",
+  "/static/icons/favicon-32.png",
+  "/static/icons/favicon-180.png",
   "/static/manifest.json",
   "/static/icons/icon-192.png",
   "/static/icons/icon-512.png",

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Verifica tu email — phantasma.dev</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root { --accent: #ffd54f; --bg: #0a0a0a; --card: #161616; --text: #e0e0e0; --error: #ff8a80; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: var(--bg); color: var(--text);
+      font-family: Inter, -apple-system, system-ui, sans-serif;
+      padding: 1rem;
+    }
+    .brand {
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--accent); margin-bottom: 0.25rem;
+    }
+    .brand-sub { color: #999; font-size: 0.8rem; margin-bottom: 2rem; }
+    .card {
+      background: var(--card); border: 1px solid rgba(255,213,79,0.3);
+      border-radius: 12px; padding: 2rem;
+      max-width: 420px; width: 100%;
+      text-align: center;
+    }
+    .icon { font-size: 3rem; margin-bottom: 1rem; }
+    .card h1 { font-size: 1.25rem; margin: 0 0 0.75rem; }
+    .card p { margin: 0 0 1.5rem; color: #bbb; font-size: 0.9rem; line-height: 1.5; }
+    .error-msg {
+      background: rgba(244, 67, 54, 0.15);
+      border: 1px solid rgba(244, 67, 54, 0.4);
+      color: var(--error);
+      padding: 1rem; border-radius: 8px;
+      font-size: 0.875rem;
+      margin-bottom: 1.5rem;
+    }
+    .btn {
+      display: inline-block; padding: 0.75rem 1.5rem;
+      background: var(--accent); color: #000;
+      border-radius: 8px; text-decoration: none;
+      font-weight: 600; font-size: 0.95rem;
+    }
+    .btn:hover { opacity: 0.9; }
+    .btn-secondary {
+      background: transparent; color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+    .actions { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+  <div class="brand">Phantasma hub</div>
+  <div class="brand-sub">Una cuenta para todas tus apps</div>
+
+  <div class="card">
+    {% if success %}
+      <div class="icon">✅</div>
+      <h1>¡Email verificado!</h1>
+      <p>Tu cuenta está activa. Ya puedes iniciar sesión y usar todas las apps de phantasma.dev.</p>
+      <a href="/login" class="btn">Iniciar sesión</a>
+    {% elif error %}
+      <div class="icon">⚠️</div>
+      <h1>No se pudo verificar</h1>
+      <div class="error-msg">{{ error }}</div>
+      <div class="actions">
+        <a href="/login" class="btn btn-secondary">Volver al login</a>
+        <a href="/register" class="btn">Crear cuenta nueva</a>
+      </div>
+    {% else %}
+      <div class="icon">⏳</div>
+      <h1>Procesando...</h1>
+    {% endif %}
+  </div>
+</body>
+</html>
